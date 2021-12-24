@@ -17,6 +17,9 @@ void prinM(vector< vector<T> > v1);
 template<class T>
 void warshall(T&);
 
+template<class T>
+void floy_warshall(T&, T&);
+
 
 
 vector< vector< int>> leerMatriz(char *fileName);
@@ -25,12 +28,17 @@ vector< vector< int>> leerMatriz(char *fileName);
 int main()
 {
 	vector<vector< int>> M2 = leerMatriz("grafo.txt");
+	vector<vector< int>> MRecorridos = leerMatriz("recorridos.txt");
 	printf("LO QUE SE LEE DEL ARCHIVO: \n");
 	prinM(M2);
 
-	warshall(M2);
+	floy_warshall(M2, MRecorridos);
+
+	//warshall(M2);
 	
 	prinM(M2);
+	cout<<"la matriz de recorridos es "<<endl;
+	prinM(MRecorridos);
 	return 0;
 }
 
@@ -93,7 +101,7 @@ void imprimeMatriz(vector< vector< int>> matriz) {
 
 
 template<class T>
-void warshall(T &matriz0)
+void floy_warshall(T& matriz0, T& matrizRecorridos)
 {
 	int n = matriz0.size();
 	for(int k = 0; k < n; k++)
@@ -102,7 +110,11 @@ void warshall(T &matriz0)
 		{
 			for(int j = 0; j<n; j++)
 			{
-				matriz0[i][j]= matriz0[i][j] or (matriz0[i][k] and matriz0[k][j]);
+				if(matriz0[i][j] > (matriz0[i][k] + matriz0[k][j]))
+				{
+					matriz0[i][j] = matriz0[i][k] + matriz0[k][j];
+					matrizRecorridos[i][j]=k;
+				}
 			}
 		}
 		cout<<"las matrices son"<<endl;
@@ -110,5 +122,6 @@ void warshall(T &matriz0)
 
 	}
 }
+
 
 
